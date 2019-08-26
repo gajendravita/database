@@ -1,0 +1,300 @@
+corresponds to your MySQL server version for the right syntax to use near '' at
+line 2
+mysql> create table datatype
+    -> (
+    -> A date,
+    -> B datetime,
+    -> C timestamp,
+    -> D time
+    -> );
+Query OK, 0 rows affected (0.38 sec)
+
+mysql> insert into datatype values (current_date(),now(),now(),now()
+    -> );
+Query OK, 1 row affected (0.09 sec)
+
+mysql> salect * from datatype;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'salec
+t * from datatype' at line 1
+mysql> select * from datatype;
++------------+---------------------+---------------------+----------+
+| A          | B                   | C                   | D        |
++------------+---------------------+---------------------+----------+
+| 2019-08-26 | 2019-08-26 19:27:55 | 2019-08-26 19:27:55 | 19:27:55 |
++------------+---------------------+---------------------+----------+
+1 row in set (0.00 sec)
+
+mysql> create table spldtype
+    -> (
+    -> id int auto_increment primary key,
+    -> membership enum('silver','gold','platinum'),
+    -> hobbies set('swimming','sking','cricket','football')
+    -> );
+Query OK, 0 rows affected (0.28 sec)
+
+mysql> insert into spldtype(membership,hobbies) values ('silver','sking,bowling'
+);
+ERROR 1265 (01000): Data truncated for column 'hobbies' at row 1
+mysql> insert into spldtype(membership,hobbies) values ('silver','sking,bowling'
+);
+ERROR 1265 (01000): Data truncated for column 'hobbies' at row 1
+mysql> insert into spldtype(membership,hobbies)
+    -> values ('silver','sking,bowling');
+ERROR 1265 (01000): Data truncated for column 'hobbies' at row 1
+mysql> insert into spldtype(membership,hobbies)
+    -> values ('silver','sking','bowling');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into spldtype(membership,hobbies)
+    -> values ('silver','sking');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> select * from spldtype;
++----+------------+---------+
+| id | membership | hobbies |
++----+------------+---------+
+|  1 | silver     | sking   |
++----+------------+---------+
+1 row in set (0.00 sec)
+
+mysql> insert into spldtype(membership,hobbies)
+    -> values ('silver','sking','cricket');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into spldtype(membership,hobbies)
+    -> values ('silver','sking,cricket');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from spldtype;
++----+------------+---------------+
+| id | membership | hobbies       |
++----+------------+---------------+
+|  1 | silver     | sking         |
+|  2 | silver     | sking,cricket |
++----+------------+---------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into spldtype(membership,hobbies)
+    -> values ('gold','sking,cricket,swimming');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into spldtype(membership,hobbies)
+    -> values ('Platinum','sking,cricket,swimming,football');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select * from spldtype;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into spldtype(membership,hobbies)
+    -> values ('silver,gold','sking','cricket');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> select * from spldtype
+    -> order by id desc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  4 | platinum   | swimming,sking,cricket,football |
+|  3 | gold       | swimming,sking,cricket          |
+|  2 | silver     | sking,cricket                   |
+|  1 | silver     | sking                           |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype
+    -> order by id asc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype
+    -> order by membership asc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype
+    -> order by membership desc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  4 | platinum   | swimming,sking,cricket,football |
+|  3 | gold       | swimming,sking,cricket          |
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype
+    -> order by hobbis asc;
+ERROR 1054 (42S22): Unknown column 'hobbis' in 'order clause'
+mysql> select * from spldtype
+    -> order by hobbies asc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype
+    -> order by 3 desc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  4 | platinum   | swimming,sking,cricket,football |
+|  3 | gold       | swimming,sking,cricket          |
+|  2 | silver     | sking,cricket                   |
+|  1 | silver     | sking                           |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype
+    -> order by 3 asc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype
+    -> order by membership asc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype orderby membership ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'membe
+rship' at line 1
+mysql> select * from spldtype orderby membership mysql> Ctrl-C -- exit!
+
+mysql> select * from spldtype orderby membership dsc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'membe
+rship dsc' at line 1
+mysql> select * from spldtype orderby membership desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'membe
+rship desc' at line 1
+mysql> select * from spldtype order by membership desc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  4 | platinum   | swimming,sking,cricket,football |
+|  3 | gold       | swimming,sking,cricket          |
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype order by membership asc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype order by membership asc;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  1 | silver     | sking                           |
+|  2 | silver     | sking,cricket                   |
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from spldtype order by 2 offset 2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'offse
+t 2' at line 1
+mysql> select * from spldtype order by hobbies offset 2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'offse
+t 2' at line 1
+mysql> select * from spldtype order by hobbies offset 2 limit 2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near 'offse
+t 2 limit 2' at line 1
+mysql> select * from spldtype order by hobbies limit 2;
++----+------------+---------------+
+| id | membership | hobbies       |
++----+------------+---------------+
+|  1 | silver     | sking         |
+|  2 | silver     | sking,cricket |
++----+------------+---------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from spldtype order by hobbies limit 2,2;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from spldtype order by hobbies limit 2,3;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from spldtype order by hobbies limit 2,10;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  3 | gold       | swimming,sking,cricket          |
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+2 rows in set (0.01 sec)
+
+mysql> select * from spldtype order by hobbies limit 3,1;
++----+------------+---------------------------------+
+| id | membership | hobbies                         |
++----+------------+---------------------------------+
+|  4 | platinum   | swimming,sking,cricket,football |
++----+------------+---------------------------------+
+1 row in set (0.00 sec)
+
+mysql>
